@@ -1,0 +1,34 @@
+{
+  "name": "windosu",
+  "version": "0.1.0",
+  "description": "Windows sudo equivalent",
+  "main": "lib/windosu.js",
+  "bin": {
+    "sudo": "./bin/sudo"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tehsenaus/windosu.git"
+  },
+  "keywords": [
+    "Windows",
+    "sudo"
+  ],
+  "author": "Sean Micklethwaite",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tehsenaus/windosu/issues"
+  },
+  "dependencies": {
+    "temp": "~0.6.0",
+    "q": "~0.9.7",
+    "tail": "~0.3.1"
+  },
+  "devDependencies": {
+    "latte": "~0.3.0-monad-alpha1",
+    "grunt": "~0.4.1"
+  }
+}

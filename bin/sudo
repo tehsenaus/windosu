@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+require('../lib/windosu').exec(
+	process.argv.slice(2).join(' ')
+)

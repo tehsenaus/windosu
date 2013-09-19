@@ -1,0 +1,101 @@
+
+var child_process = require('child_process'),
+	Q = require('q'),
+	fs = require('fs'),
+	path = require('path'),
+	Tail = require('tail').Tail,
+	pipe = require('./pipe');
+
+
+module.exports.exec = function (command, options, callback) {
+	var promise = do {
+
+		var bat =<< Q.nfcall( fs.readFile,
+			path.join(__dirname, '..', 'windosu-elevate.cmd'),
+			'ascii'
+		)
+
+		var id = '.windosu.' + new Date().getTime();
+		var temp = path.join(process.env.TEMP, id);
+		var inputName, outputName;
+		var temps = {
+			error: temp + '.err'
+		};
+		var replacements = {
+			dir: process.cwd(),
+			temp: temp,
+			command: command,
+			pipe: "node " + path.join(__dirname, "pipe.js"),
+			input: inputName = id + '-in',
+			output: outputName = id + '-out',
+			invisible: path.join(__dirname, '..', 'invisible.vbs'),
+
+			stderr_redir: ( process.stdout.isTTY
+				// If outputting to console, redirect stderr
+				? '2>&1'
+				: '2> %ERROR%'
+			)
+		};
+		for ( var n in temps ) replacements[n] = temps[n];
+
+		for ( var n in replacements ) {
+			bat = bat.replace('{{ '+n+' }}', replacements[n])
+		}
+		
+
+		var batOut = temps.BAT = temp + '-elevate.bat';
+		<< Q.nfcall( fs.writeFile,
+			batOut, bat
+		);
+
+		<< Q.nfcall( fs.writeFile,
+			temps.error, ""
+		);
+
+
+		// Pipe stdin to named pipe
+		var inputPromise = pipe(inputName, { serve: true })
+
+		// Read stdout from named pipe
+		var outputPromise = pipe(outputName, { serve: true, read: true })
+
+
+		var tail = process.stdout.isTTY && new Tail(temps.error);
+		if ( tail ) {
+			tail.on('line', function (line) {
+				console.error(line)
+			})
+			tail.on('error', function (err) {
+				console.error(err);
+			})
+		}
+
+		return do {
+			// Start the process
+			<< Q.nfcall( child_process.exec,
+				'cmd /C ' + batOut,
+				options || callback
+			);
+
+			// Wait for done
+			<< outputPromise;
+		}.fin(function () {
+			if (tail) tail.unwatch();
+
+			inputPromise.then(input => {
+				input.end()
+			})
+
+			// Clean temps (async)
+			for ( var n in temps ) {
+				fs.unlink(temps[n]);
+			}
+		})
+	}
+
+	if ( callback ) {
+		promise.then(r => callback(null, r), e => callback(e))
+	}
+
+	return promise;
+}
