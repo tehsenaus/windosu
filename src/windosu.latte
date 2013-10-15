@@ -82,14 +82,16 @@ module.exports.exec = function (command, options, callback) {
 		}.fin(function () {
 			if (tail) tail.unwatch();
 
-			inputPromise.then(input => {
-				input.end()
-			})
-
 			// Clean temps (async)
 			for ( var n in temps ) {
 				fs.unlink(temps[n]);
 			}
+
+			// Wait for input to be closed first, so stdin is
+			// freed up for use.
+			return inputPromise.then(input => {
+				return input.closeAndWait();
+			})
 		})
 	}
 

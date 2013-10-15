@@ -23,11 +23,12 @@ function pipe(path, options) {
 			process.stdin.on('data', piper);
 			process.stdin.on('end', ender);
 
-			socket.on('end', () => {
+			socket.closeAndWait = () => {
+				socket.end();
 				process.stdin.pause();
 				process.stdin.removeListener('data', piper)
 				process.stdin.removeListener('end', ender)
-			})
+			}
 
 			d.resolve(socket);
 		}
