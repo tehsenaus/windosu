@@ -8,15 +8,17 @@ var child_process = require('child_process'),
 
 
 module.exports.exec = function (command, options, callback) {
+	options = options || {};
+
 	var promise = do {
 
 		var bat =<< Q.nfcall( fs.readFile,
-			path.join(__dirname, '..', 'windosu-elevate.cmd'),
+			path.join(__dirname, '..', options.user ? 'windosu-runas.cmd' : 'windosu-elevate.cmd'),
 			'ascii'
 		)
 
 		var id = '.windosu.' + new Date().getTime();
-		var temp = path.join(process.env.TEMP, id);
+		var temp = path.join(options.user ? 'C:\\temp' : process.env.TEMP, id);
 		var inputName, outputName;
 		var temps = {
 			error: temp + '.err'
@@ -59,8 +61,7 @@ module.exports.exec = function (command, options, callback) {
 		// Read stdout from named pipe
 		var outputPromise = pipe(outputName, { serve: true, read: true })
 
-
-		var tail = process.stdout.isTTY && new Tail(temps.error);
+		var tail = !process.stdout.isTTY && new Tail(temps.error);
 		if ( tail ) {
 			tail.on('line', function (line) {
 				console.error(line)
@@ -71,11 +72,13 @@ module.exports.exec = function (command, options, callback) {
 		}
 
 		return do {
+
 			// Start the process
-			<< Q.nfcall( child_process.exec,
-				'cmd /C ' + batOut,
-				options || callback
-			);
+			if ( options.user ) {
+				<< spawn('runas.exe', [/*'/env',*/ '/netonly', '/user:' + options.user, batOut]);
+			} else {
+				<< Q.nfcall( child_process.exec, 'cmd /C ' + batOut );
+			}
 
 			// Wait for done
 			<< outputPromise;
@@ -100,4 +103,24 @@ module.exports.exec = function (command, options, callback) {
 	}
 
 	return promise;
+}
+
+
+function spawn(cmd, args) {
+	var d = Q.defer();
+
+	var p = child_process.spawn(cmd, args, {
+		stdio: 'inherit'
+	});
+
+	p.on('exit', code => {
+
+		if ( code ) {
+			d.reject(code);
+		} else {
+			d.resolve();
+		}
+	});
+
+	return d.promise;
 }
