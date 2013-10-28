@@ -27,7 +27,7 @@ module.exports.exec = function (command, options, callback) {
 			dir: process.cwd(),
 			temp: temp,
 			command: command,
-			pipe: "node " + path.join(__dirname, "pipe.js"),
+			pipe: "node \"" + path.join(__dirname, "pipe.js") + '"',
 			input: inputName = id + '-in',
 			output: outputName = id + '-out',
 			invisible: path.join(__dirname, '..', 'invisible.vbs'),

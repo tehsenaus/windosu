@@ -48,7 +48,7 @@ If ERRORLEVEL 1 (
 
 :: Hide the window
 IF [%1]==[] (
-   wscript.exe {{ invisible }} "cmd /C %~f0 run"
+   wscript.exe "{{ invisible }}" "cmd /C %~f0 run"
 ) else (
 
    If exist "%_tempvbs%" ( Del "%_tempvbs%" )
