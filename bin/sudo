@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 
+var args = [];
+for(var i in process.argv.slice(2)){
+	v=process.argv.slice(2)[i];
+	if (v.indexOf(' ')!=-1) {
+		v='"'+v+'"';
+	}
+	args.push(v);
+}
+
 require('../lib/windosu').exec(
-	process.argv.slice(2).join(' ')
+	args.join(' ')
 )
