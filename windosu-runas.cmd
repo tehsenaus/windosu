@@ -13,7 +13,7 @@ IF [%1]==[] (
    wscript.exe {{ invisible }} "cmd /C %~f0 run"
 ) else (
    
-   cd %DIR%
+   cd /D %DIR%
 
    %PIPE% read client %INPUT% | ({{ command }}) {{ stderr_redir }} | %PIPE% write client %OUTPUT% 
    

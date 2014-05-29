@@ -58,7 +58,7 @@ IF [%1]==[] (
 
    If exist "%_tempfile%" ( Del "%_tempfile%" )
 
-   cd %DIR%
+   cd /D %DIR%
 
    %PIPE% read client %INPUT% | ({{ command }}) {{ stderr_redir }} | %PIPE% write client %OUTPUT% 
 )
