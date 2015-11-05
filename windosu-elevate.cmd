@@ -10,6 +10,7 @@ Set DIR={{ dir }}
 Set INPUT={{ input }}
 Set OUTPUT={{ output }}
 Set ERROR={{ error }}
+Set CLI_WIDTH={{ cliWidth }}
 Set PIPE={{ pipe }}
 
 set FIND=%SystemRoot%\System32\Find
