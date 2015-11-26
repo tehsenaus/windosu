@@ -30,7 +30,7 @@ If ERRORLEVEL 1 (
 
 :: Create a temporary VBScript
    Echo Set objShell = CreateObject^("Shell.Application"^) > %_tempvbs%
-   Echo objShell.ShellExecute "%~f0", "", "", "runas", 1 >> %_tempvbs%
+   Echo objShell.ShellExecute "%~f0", "", "", "runas", 0 >> %_tempvbs%
 
 :: Relaunch this script 'As Admin'
    cscript "%_tempvbs%" //nologo
