@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 
-var args = [];
-for(var i in process.argv.slice(2)){
-	v=process.argv.slice(2)[i];
-	if (v.indexOf(' ')!=-1) {
-		v='"'+v+'"';
+var command = process.argv.slice(2).map(function(arg) {
+	if (arg.indexOf(' ') !== -1) {
+		return '"' + arg + '"';
 	}
-	args.push(v);
-}
 
-require('../lib/windosu').exec(
-	args.join(' ')
-)
+	return arg;
+}).join(' ');
+
+require('../lib/windosu').exec(command);

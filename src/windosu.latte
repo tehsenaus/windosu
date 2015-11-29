@@ -4,6 +4,7 @@ var child_process = require('child_process'),
 	fs = require('fs'),
 	path = require('path'),
 	Tail = require('tail').Tail,
+	cliWidth = require('cli-width'),
 	pipe = require('./pipe');
 
 
@@ -27,6 +28,7 @@ module.exports.exec = function (command, options, callback) {
 			dir: process.cwd(),
 			temp: temp,
 			command: command,
+			cliWidth: cliWidth(),
 			pipe: "\""+process.execPath+"\" \"" + path.join(__dirname, "pipe.js") + '"',
 			input: inputName = id + '-in',
 			output: outputName = id + '-out',

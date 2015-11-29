@@ -6,6 +6,7 @@
 Set DIR={{ dir }}
 Set INPUT={{ input }}
 Set OUTPUT={{ output }}
+Set CLI_WIDTH={{ cliWidth }}
 Set PIPE={{ pipe }}
 
 :: Hide the window
