@@ -12,6 +12,8 @@ Use it:
 sudo make me-a-sandwich
 ```
 
+You may need to add `%appdata%\npm` to path.
+
 ## Use it in your programs
 
 ```
