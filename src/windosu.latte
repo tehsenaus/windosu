@@ -32,7 +32,6 @@ module.exports.exec = function (command, options, callback) {
 			pipe: "\""+process.execPath+"\" \"" + path.join(__dirname, "pipe.js") + '"',
 			input: inputName = id + '-in',
 			output: outputName = id + '-out',
-			invisible: path.join(__dirname, '..', 'invisible.vbs'),
 
 			stderr_redir: ( process.stdout.isTTY
 				// If outputting to console, redirect stderr

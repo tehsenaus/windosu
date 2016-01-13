@@ -6,6 +6,7 @@
 Set _temp={{ temp }}
 Set _tempfile=%_temp%SaveDrives.txt
 Set _tempvbs=%_temp%getadmin.vbs
+Set _tempinvisible=%_temp%invisible.vbs
 Set DIR={{ dir }}
 Set INPUT={{ input }}
 Set OUTPUT={{ output }}
@@ -49,7 +50,9 @@ If ERRORLEVEL 1 (
 
 :: Hide the window
 IF [%1]==[] (
-   wscript.exe "{{ invisible }}" "cmd /C %~f0 run"
+   Echo CreateObject^("Wscript.Shell"^).Run "" ^& WScript.Arguments^(0^) ^& "", 0, False > %_tempinvisible%
+   wscript.exe %_tempinvisible% "cmd /C %~f0 run"
+   Del %_tempinvisible%
 ) else (
 
    If exist "%_tempvbs%" ( Del "%_tempvbs%" )
