@@ -1,6 +1,6 @@
 {
   "name": "windosu",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Windows sudo equivalent",
   "main": "lib/windosu.js",
   "bin": {
