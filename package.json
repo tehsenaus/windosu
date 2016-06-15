@@ -23,10 +23,11 @@
     "url": "https://github.com/tehsenaus/windosu/issues"
   },
   "dependencies": {
-    "temp": "~0.6.0",
     "cli-width": "^1.1.0",
     "q": "~0.9.7",
-    "tail": "~0.3.1"
+    "rimraf": "^2.5.2",
+    "tail": "~0.3.1",
+    "temp": "~0.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
