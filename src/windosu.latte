@@ -5,6 +5,7 @@ var child_process = require('child_process'),
 	path = require('path'),
 	Tail = require('tail').Tail,
 	cliWidth = require('cli-width'),
+	rimraf = require('rimraf'),
 	pipe = require('./pipe');
 
 
@@ -88,7 +89,7 @@ module.exports.exec = function (command, options, callback) {
 
 			// Clean temps (async)
 			for ( var n in temps ) {
-				fs.unlink(temps[n]);
+				rimraf(temps[n], function () {});
 			}
 
 			// Wait for input to be closed first, so stdin is
